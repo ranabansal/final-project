@@ -1,0 +1,155 @@
+---
+title: "Dataset Analysis"
+author: "Rana Bansal"
+date: "11/26/2018"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+# Here we load the necessary libraries for importing the data and conducting the analysis. 
+library(tidyverse)
+library(knitr)
+library(haven)
+library(kableExtra)
+```
+
+```{r importdata, echo = FALSE}
+## import the stata dataset
+# Note: February 2015 is missing from this dataset and needs to be added
+mydata <- read_dta("/Users/ranabansal/Documents/Econometrics/independent/India/Monthly_DTA_Files/India_AllPartners_combined.dta")
+```
+
+```{r modification, echo = FALSE}
+## create new variable for date and sort
+mydata <- mydata %>%
+  mutate(period_string = paste(period, sep='', '01')) %>%
+  mutate(period_string = as.Date(period_string, format = "%Y%m%d"))
+```
+
+## Largest India Export Partners by Year (Tables)
+```{r top_partners, echo = FALSE}
+top_partners <- mydata %>%
+  select(year, partner, tradevalueus, sum_SA_exports) %>%
+  group_by(year, partner) %>%
+  summarize(yearly_total = sum(tradevalueus))
+
+# Top 15 trading partners for 2014
+top_partners_2014 <- top_partners %>%
+  filter(partner != "World") %>%
+  filter(year == 2014) %>%
+  arrange(desc(yearly_total)) %>%
+  head(15) %>%
+  kable(caption = "Top India Trading Partners, 2014",
+        col.names = c("Year", "Partner", "Total Trade Value")) %>%
+  kable_styling()
+
+# Top 15 trading partners for 2015
+# No Feb 2015 data in this dataset
+top_partners_2015 <- top_partners %>%
+  filter(partner != "World") %>%
+  filter(year == 2015) %>%
+  arrange(desc(yearly_total)) %>%
+  head(15) %>%
+  kable(caption = "Top India Trading Partners, 2015",
+        col.names = c("Year", "Partner", "Total Trade Value")) %>%
+  kable_styling()
+
+# Top 15 trading partners for 2016
+top_partners_2016 <- top_partners %>%
+  filter(partner != "World") %>%
+  filter(year == 2016) %>%
+  arrange(desc(yearly_total)) %>%
+  head(15) %>%
+  kable(caption = "Top India Trading Partners, 2016",
+        col.names = c("Year", "Partner", "Total Trade Value")) %>%
+  kable_styling()
+
+# Top 15 trading partners for 2017
+top_partners_2017 <- top_partners %>%
+  filter(partner != "World") %>%
+  filter(year == 2017) %>%
+  arrange(desc(yearly_total)) %>%
+  head(15) %>%
+  kable(caption = "Top India Trading Partners, 2017",
+        col.names = c("Year", "Partner", "Total Trade Value")) %>%
+  kable_styling()
+
+top_partners_2014
+top_partners_2015
+top_partners_2016
+top_partners_2017
+```
+
+## Largest India Export Partners by Year (Graphs)
+```{r top_partners_graphs, echo = FALSE}
+top_partners_2014_graph <- top_partners %>%
+  filter(partner != "World") %>%
+  filter(year == 2014) %>%
+  arrange(desc(yearly_total)) %>%
+  head(15) 
+
+top_partners_2015_graph <- top_partners %>%
+  filter(partner != "World") %>%
+  filter(year == 2015) %>%
+  arrange(desc(yearly_total)) %>%
+  head(15) 
+
+top_partners_2016_graph <- top_partners %>%
+  filter(partner != "World") %>%
+  filter(year == 2016) %>%
+  arrange(desc(yearly_total)) %>%
+  head(15) 
+
+top_partners_2017_graph <- top_partners %>%
+  filter(partner != "World") %>%
+  filter(year == 2017) %>%
+  arrange(desc(yearly_total)) %>%
+  head(15) 
+
+ggplot(top_partners_2014_graph, 
+       aes(x = reorder(partner, -yearly_total), 
+           y = yearly_total)) + 
+  geom_bar(stat="identity") + 
+  labs(x = "Trade Partner", y = "Total Export Value", title = "India: Top 2014 Export Partners") + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+ggplot(top_partners_2015_graph, 
+       aes(x = reorder(partner, -yearly_total), 
+           y = yearly_total)) + 
+  geom_bar(stat="identity") + 
+  labs(x = "Trade Partner", y = "Total Export Value", title = "India: Top 2015 Export Partners") + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+ggplot(top_partners_2016_graph, 
+       aes(x = reorder(partner, -yearly_total), 
+           y = yearly_total)) + 
+  geom_bar(stat="identity") + 
+  labs(x = "Trade Partner", y = "Total Export Value", title = "India: Top 2016 Export Partners") + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+ggplot(top_partners_2017_graph, 
+       aes(x = reorder(partner, -yearly_total), 
+           y = yearly_total)) + 
+  geom_bar(stat="identity") + 
+  labs(x = "Trade Partner", y = "Total Export Value", title = "India: Top 2017 Export Partners") + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+
+## Largest India Export Commodities by Year 
+```{r top_commodities, echo = FALSE}
+commodity_totals <- mydata %>%
+  select(year, commoditycode, tradevalueus, sum_SA_exports) %>%
+  group_by(year, commoditycode) %>%
+  summarize(commodity_total = sum(tradevalueus))
+
+top_commodities_2014 <- commodity_totals %>%
+  #filter(commoditycode != 99) %>%
+  filter(year == 2014) %>%
+  arrange(desc(commodity_total)) %>%
+  head(15) %>%
+  kable(caption = "Top India Commodities, 2014",
+        col.names = c("Year", "Commodity", "Total Trade Value")) %>%
+  kable_styling()
+
+top_commodities_2014
+```
