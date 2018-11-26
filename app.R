@@ -30,7 +30,8 @@ ui <- fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
-      plotOutput("distPlot")
+      plotOutput("distPlot"),
+      h3("https://github.com/ranabansal/final-project")
     )
   )
 )
@@ -48,7 +49,8 @@ server <- function(input, output) {
       ggplot(aes(x = Month, y = Alpha, color = Import.Country)) + geom_point() +
       xlab("Date") +
       ylab("Fraction of Destination Country Imports from India") +
-      ggtitle("Iron and Steel") 
+      ggtitle("Iron and Steel") +
+      labs(caption = "Export Data from United Nations COMTRADE Database")
   })
 }
 
