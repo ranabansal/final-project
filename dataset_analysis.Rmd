@@ -8,15 +8,28 @@ output: html_document
 ```{r setup, include = FALSE}
 # Here we load the necessary libraries for importing the data and conducting the analysis. 
 library(tidyverse)
+library(dplyr)
 library(knitr)
-library(haven)
+library(foreign)
+library(lubridate)
 library(kableExtra)
+library(shiny)
+library(tidytext)
+library(stringr)
+library(scales)
+library(readxl)
+library(haven)
 ```
 
-```{r importdata, echo = FALSE}
+```{r importdata, echo = FALSE, warning = FALSE, message = FALSE}
 ## import the stata dataset
 # Note: February 2015 is missing from this dataset and needs to be added
 mydata <- read_dta("/Users/ranabansal/Documents/Econometrics/independent/India/Monthly_DTA_Files/India_AllPartners_combined.dta")
+codes <- read_csv("/Users/ranabansal/Documents/Econometrics/independent/India/Monthly_DTA_Files/Two_Digit_codes.csv") %>%
+  mutate(commoditycode = Code)
+
+newdata <- mydata %>% 
+  left_join(codes)
 ```
 
 ```{r modification, echo = FALSE}
@@ -74,6 +87,10 @@ top_partners_2017 <- top_partners %>%
         col.names = c("Year", "Partner", "Total Trade Value")) %>%
   kable_styling()
 
+top_partners_simp <- top_partners %>%
+  mutate(yearly_total = round(yearly_total/1000000000, 1))
+
+saveRDS(top_partners_simp, file = "./shiny/top_partners_simp.rds")
 top_partners_2014
 top_partners_2015
 top_partners_2016
@@ -137,9 +154,9 @@ ggplot(top_partners_2017_graph,
 
 ## Largest India Export Commodities by Year 
 ```{r top_commodities, echo = FALSE}
-commodity_totals <- mydata %>%
-  select(year, commoditycode, tradevalueus, sum_SA_exports) %>%
-  group_by(year, commoditycode) %>%
+commodity_totals <- newdata %>%
+  select(year, commoditycode, Description, tradevalueus) %>%
+  group_by(year, commoditycode, Description) %>%
   summarize(commodity_total = sum(tradevalueus))
 
 top_commodities_2014 <- commodity_totals %>%
@@ -148,8 +165,38 @@ top_commodities_2014 <- commodity_totals %>%
   arrange(desc(commodity_total)) %>%
   head(15) %>%
   kable(caption = "Top India Commodities, 2014",
-        col.names = c("Year", "Commodity", "Total Trade Value")) %>%
+        col.names = c("Year", "Commodity", "Name", "Total Trade Value (USD)")) %>%
+  kable_styling()
+
+top_commodities_2015 <- commodity_totals %>%
+  #filter(commoditycode != 99) %>%
+  filter(year == 2015) %>%
+  arrange(desc(commodity_total)) %>%
+  head(15) %>%
+  kable(caption = "Top India Commodities, 2015",
+        col.names = c("Year", "Commodity", "Name", "Total Trade Value (USD)")) %>%
+  kable_styling()
+
+top_commodities_2016 <- commodity_totals %>%
+  #filter(commoditycode != 99) %>%
+  filter(year == 2016) %>%
+  arrange(desc(commodity_total)) %>%
+  head(15) %>%
+  kable(caption = "Top India Commodities, 2016",
+        col.names = c("Year", "Commodity", "Name", "Total Trade Value (USD)")) %>%
+  kable_styling()
+
+top_commodities_2017 <- commodity_totals %>%
+  #filter(commoditycode != 99) %>%
+  filter(year == 2017) %>%
+  arrange(desc(commodity_total)) %>%
+  head(15) %>%
+  kable(caption = "Top India Commodities, 2017",
+        col.names = c("Year", "Commodity", "Name", "Total Trade Value (USD)")) %>%
   kable_styling()
 
 top_commodities_2014
+top_commodities_2015
+top_commodities_2016
+top_commodities_2017
 ```
