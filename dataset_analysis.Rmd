@@ -30,6 +30,8 @@ codes <- read_csv("/Users/ranabansal/Documents/Econometrics/independent/India/Mo
 
 newdata <- mydata %>% 
   left_join(codes)
+
+write.dta(newdata, "/Users/ranabansal/Documents/Econometrics/independent/India/Monthly_DTA_Files/newdata.dta")
 ```
 
 ```{r modification, echo = FALSE}
@@ -195,6 +197,7 @@ top_commodities_2017 <- commodity_totals %>%
         col.names = c("Year", "Commodity", "Name", "Total Trade Value (USD)")) %>%
   kable_styling()
 
+saveRDS(commodity_totals, file = "./shiny/commodity_totals.rds")
 top_commodities_2014
 top_commodities_2015
 top_commodities_2016

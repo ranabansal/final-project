@@ -12,10 +12,11 @@ library(rgdal)
 # Loading Chart Data
 partners <- read_rds("top_partners_simp.rds")
 qpal <- colorQuantile("Blues", NULL, n = 7)
+commodities <- read_rds("commodity_totals.rds")
 
 # Define UI for the application
 ui <- dashboardPage(
-  dashboardHeader(title = "Indian Exports"),
+  dashboardHeader(title = "India's Exports"),
   dashboardSidebar(
     sidebarMenu(
       menuItem("Home", tabName = "dashboard", icon = icon("home")),
@@ -27,37 +28,39 @@ ui <- dashboardPage(
     tabItems(
       # First tab content
       tabItem(tabName = "dashboard",
-              h3("India is the 17th largest exporter in the world."),
-              h5("Using this application, a user can identify India's most important
-                 export partners and top exported commodities."),
-              h5("In 2017, the top export destinations of India were the United States
+              h2("Welcome to the Indian international trade database!"),
+              h6("For my final project, I was interested in understanding which countries
+                 are most important for India's export economy. I provide graphs and tables
+                 which show India's most important trading partners between 2014 and 2017."),
+              h6("To explore this relationship, I downloaded data from the United Nations COMTRADE
+                 database (https://comtrade.un.org/) and simplified and then merged the names of commodities using two-digit
+                 classification codes."),
+              h6("In 2017, the top export destinations of India were the United States
                  of America, United Arab Emirates, Hong Kong, China, and Singapore."),
               leafletOutput("mymap", height = "300")
               
       ),
       
       # Second tab content
-      tabItem(tabName = "exports",
+      tabItem(tabName = "graphs",
               h2("India Top Export Partners"),
               box(
                 title = "Please select year to view below.",
+                radioButtons("year_choice", "Year:", 
+                             choices = c(2014, 2015, 2016, 2017)), inline = TRUE
+              ),
+              plotOutput("distPlot2", height = 400)
+      ),
+      
+      # Third tab content
+      tabItem(tabName = "exports",
+              h2("India Top Export Partners"),
+              box(
                 selectInput("year_choice", "Year:", 
                             choices = c(2014, 2015, 2016, 2017)),
                 helpText("Data from United Nations COMTRADE Database.")
               ),
               DT::dataTableOutput("distPlot")
-      ),
-      
-      # Third tab content
-      tabItem(tabName = "graphs",
-              h2("India Top Export Partners"),
-              box(
-                title = "Please select year to view below.",
-                selectInput("year_choice", "Year:", 
-                            choices = c(2014, 2015, 2016, 2017)),
-                helpText("Data from United Nations COMTRADE Database.")
-              ),
-              plotOutput("distPlot2")
       )
     )
   )
@@ -71,6 +74,14 @@ server <- function(input, output) {
       arrange(desc(yearly_total))
   })
   
+  datareact2 <- reactive({
+    partners %>% 
+      filter(year == input$year_choice) %>%
+      filter(partner != "World") %>%
+      arrange(desc(yearly_total)) %>%
+      head(10)
+  })
+  
   output$distPlot <- DT::renderDataTable({
     datareact() %>%
       filter(partner != "World") %>%
@@ -79,14 +90,21 @@ server <- function(input, output) {
   })
   
   output$distPlot2 <- renderPlot({
-    
+    datareact2() %>%
+    ggplot( 
+           aes(x = reorder(partner, -yearly_total), 
+               y = yearly_total)) + 
+      geom_bar(stat="identity") + 
+      geom_text(aes(label = yearly_total), vjust = 1.5, colour = "white", size = 3) +
+      labs(x = NULL, y = "Trade Value (Billions USD)") + 
+      theme(axis.text.x = element_text(angle = 60, hjust = 1))
   })
   
   output$mymap <- renderLeaflet({
     leaflet() %>%
       addTiles() %>%
-      setView(lng = 78.0419, lat = 27.1750, zoom = 1.75) %>%
-      addMarkers(lng = 78.0419, lat = 27.1750, popup = "India")
+      setView(lng = 78.0419, lat = 27.1750, zoom = 1.5) %>%
+      addMarkers(lng = 78.0419, lat = 27.1750)
   })
     
   }
