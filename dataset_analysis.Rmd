@@ -22,20 +22,25 @@ library(haven)
 ```
 
 ```{r importdata, echo = FALSE, warning = FALSE, message = FALSE}
-## import the stata dataset
+# Import the stata dataset with monthly trade data. The dataset for the comtrade data is in this format and we need to use the haven package. 
 # Note: February 2015 is missing from this dataset and needs to be added
 mydata <- read_dta("/Users/ranabansal/Documents/Econometrics/independent/India/Monthly_DTA_Files/India_AllPartners_combined.dta")
+
+# This file has the codes and descriptions of commodity items. 
 codes <- read_csv("/Users/ranabansal/Documents/Econometrics/independent/India/Monthly_DTA_Files/Two_Digit_codes.csv") %>%
   mutate(commoditycode = Code)
 
+# We use the left join function to match the new names to the codes of the commodities
 newdata <- mydata %>% 
   left_join(codes)
 
+# We would like to write out the new data file we made to the directory to be used in Stata later. 
 write.dta(newdata, "/Users/ranabansal/Documents/Econometrics/independent/India/Monthly_DTA_Files/newdata.dta")
 ```
 
 ```{r modification, echo = FALSE}
-## create new variable for date and sort
+## We have to add teh first day of the month to the date
+# Then, we can format the date in a format that the graph will be able to use in the scatter plot
 mydata <- mydata %>%
   mutate(period_string = paste(period, sep='', '01')) %>%
   mutate(period_string = as.Date(period_string, format = "%Y%m%d"))
@@ -43,6 +48,9 @@ mydata <- mydata %>%
 
 ## Largest India Export Partners by Year (Tables)
 ```{r top_partners, echo = FALSE}
+# Here we select the variables we want to see and find the total for each country by year
+# We use the group_by function as we want to cluster at the year/country level
+# We then create a new variable called yearly_total that stores the sum. 
 top_partners <- mydata %>%
   select(year, partner, tradevalueus, sum_SA_exports) %>%
   group_by(year, partner) %>%

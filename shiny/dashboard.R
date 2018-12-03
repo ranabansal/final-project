@@ -66,17 +66,20 @@ ui <- dashboardPage(
       # This provides information on the contents of the app.
       # Also, provides info on data resource and some basic summary stats on trade.
       # Finally, just for the effect, I included a graph on the page that looks nice.
-      # Including a graph is nice as we are looking at international trade data. 
+      # Including a graph is nice as we are looking at international trade data, but this is just for aesthetics.
       tabItem(tabName = "dashboard",
               h2("Welcome to the Indian international trade database!"),
-              h6("For my final project, I was interested in understanding which countries
-                 are most important for India's export economy. I provide graphs and tables
-                 which show India's most important trading partners between 2014 and 2017."),
-              h6("To explore this relationship, I downloaded data from the United Nations COMTRADE
+              h4("Summary"),
+              h6("This dashboard helps a user understand India's export economy. The five tabs include graphs and tables
+                 which showcase India's most important trading partners and most exported commodities between 2014 and 2017. "),
+              h4("Methodology and Core Findings"),
+              h6("To explore Indian exports, I downloaded monthly data from the United Nations COMTRADE
                  database (https://comtrade.un.org/) and simplified and then merged the names of commodities using two-digit
                  classification codes."),
               h6("In 2017, the top export destinations of India were the United States
                  of America, United Arab Emirates, Hong Kong, China, and Singapore."),
+              h6("More detailed country analysis at the monthly level showed that the United Arab Emirates was heavily reliant
+                 on India for both iron and steel and coffee and tea imports in 2017, compared to other export partners."),
               leafletOutput("mymap", height = "300")
       ),
       
@@ -85,10 +88,14 @@ ui <- dashboardPage(
       # After selecting the year, they see a bar graph of the top India export partners.
       # There is a select height for the graph. 
       tabItem(tabName = "graphs",
-              h2("India Top Export Partners"),
+              h4("India Top Export Partners"),
+              h6("India's largest export partners stayed relatively constant over the four year period: 
+                 the United States of America, United Arab Emirates, Hong Kong, and China occupied the top four positions each year. 
+                 Saudi Arabia and the United Kingdom were also consistently among top export partners.
+                 Both the USA and UAE had over double the amount of imports from India than any other partner."),
               box(
                 title = "Please select year to view below.",
-                radioButtons("year_choice", "Year:", 
+                selectInput("year_choice", "Year:", 
                              choices = c(2014, 2015, 2016, 2017)), inline = TRUE
               ),
               plotOutput("distPlot2", height = 275)
@@ -99,7 +106,7 @@ ui <- dashboardPage(
       # however, it has a function where people can search by country name.
       # Also, unlike the previous tab which only shows top, this continues the list. 
       tabItem(tabName = "exports",
-              h2("India Top Export Partners"),
+              h4("India Top Export Partners"),
               box(
                 selectInput("year_choice2", "Year:", 
                             choices = c(2014, 2015, 2016, 2017)),
@@ -112,7 +119,9 @@ ui <- dashboardPage(
       # This tab allows users to see the top exported commodity items by year
       # This requires a new dataset with merged HS commodity names (see analysis file)
       tabItem(tabName = "commodities",
-              h2("India Top Commodities"),
+              h4("India Top Commodities"),
+              h6("The top export commodities for India over the four year period remained constant.
+                 Mineral fuels and pearls (diamonds, other gems) were most important, followed by vehicles, nuclear products and chemical goods."),
               box(
                 selectInput("year_choice3", "Year:",
                             choices = c(2014, 2015, 2016, 2017)),
@@ -238,8 +247,8 @@ server <- function(input, output) {
     ggplot( 
            aes(x = reorder(partner, -yearly_total), 
                y = yearly_total)) + 
-      geom_bar(stat="identity", color = "seashell", fill = "orangered2") + 
-      geom_text(aes(label = yearly_total), vjust = 1.5, colour = "white", size = 3) +
+      geom_bar(stat="identity", color = "green", fill = "orangered2") + 
+      geom_text(aes(label = yearly_total), vjust = 1.5, colour = "white", size = 4) +
       labs(x = NULL, y = "Trade Value (Billions USD)") + 
       theme(axis.text.x = element_text(angle = 60, hjust = 1), 
             panel.grid.major = element_blank(),
