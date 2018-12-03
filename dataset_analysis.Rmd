@@ -159,7 +159,8 @@ ggplot(top_partners_2017_graph,
 commodity_totals <- newdata %>%
   select(year, commoditycode, Description, tradevalueus) %>%
   group_by(year, commoditycode, Description) %>%
-  summarize(commodity_total = sum(tradevalueus))
+  summarize(commodity_total = sum(tradevalueus)) %>%
+  mutate(commodity_total = round(commodity_total/1000000000, 1))
 
 top_commodities_2014 <- commodity_totals %>%
   #filter(commoditycode != 99) %>%
