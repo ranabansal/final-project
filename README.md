@@ -1,1 +1,3 @@
-# final-project
+My project provides information on India’s largest export partners and most exported commodities between 2014 and 2017.
+My project provides information on which trade partners and commodities are most important for India. Users can search for specific countries and specific commodity goods to see their importance to the export economy. 
+Also, my app provides information on India’s trade fraction of total South Asian exports at a granular level for a specific commodity, for instance a snapshot of Iron and Steel Exports. With these tools, a user can see how India's export of this commodity grew in importance for countries around the globe. 
