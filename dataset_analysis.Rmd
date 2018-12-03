@@ -89,10 +89,14 @@ top_partners_2017 <- top_partners %>%
         col.names = c("Year", "Partner", "Total Trade Value")) %>%
   kable_styling()
 
+# Here we simplify the number by counting it in billions, count to one decimal place.
 top_partners_simp <- top_partners %>%
   mutate(yearly_total = round(yearly_total/1000000000, 1))
 
+# I save the edited version of dataset for use in the app by putting in shiny folder.
 saveRDS(top_partners_simp, file = "./shiny/top_partners_simp.rds")
+
+# I print the four tables to look at summary stats for personal reference. 
 top_partners_2014
 top_partners_2015
 top_partners_2016
@@ -101,30 +105,41 @@ top_partners_2017
 
 ## Largest India Export Partners by Year (Graphs)
 ```{r top_partners_graphs, echo = FALSE}
+# Here sort the top export partners for 2014 in order to graph. 
+# Don't want the world partner only individual countries. 
+# Have to arrange in descending order of total exports 
 top_partners_2014_graph <- top_partners %>%
   filter(partner != "World") %>%
   filter(year == 2014) %>%
   arrange(desc(yearly_total)) %>%
   head(15) 
 
+# Next, sort the top partners for 2015, also to be used in graph. 
+# As above, we only want the top 15 which we pick
 top_partners_2015_graph <- top_partners %>%
   filter(partner != "World") %>%
   filter(year == 2015) %>%
   arrange(desc(yearly_total)) %>%
   head(15) 
 
+# Repeat for 2016 data
 top_partners_2016_graph <- top_partners %>%
   filter(partner != "World") %>%
   filter(year == 2016) %>%
   arrange(desc(yearly_total)) %>%
   head(15) 
 
+# Repeat for 2017 data
 top_partners_2017_graph <- top_partners %>%
   filter(partner != "World") %>%
   filter(year == 2017) %>%
   arrange(desc(yearly_total)) %>%
   head(15) 
 
+# This is the plot for 2014 data, which is a bar chart
+# Reorder the bars in the chart in descending order of how much country exports
+# On the y axis plot the $ amount in billions. 
+# The text is rotated in order for the country names to be seen more easily.
 ggplot(top_partners_2014_graph, 
        aes(x = reorder(partner, -yearly_total), 
            y = yearly_total)) + 
@@ -132,6 +147,7 @@ ggplot(top_partners_2014_graph,
   labs(x = "Trade Partner", y = "Total Export Value", title = "India: Top 2014 Export Partners") + 
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
+# Repat for 2015
 ggplot(top_partners_2015_graph, 
        aes(x = reorder(partner, -yearly_total), 
            y = yearly_total)) + 
@@ -139,6 +155,7 @@ ggplot(top_partners_2015_graph,
   labs(x = "Trade Partner", y = "Total Export Value", title = "India: Top 2015 Export Partners") + 
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
+# Repeat for 2016
 ggplot(top_partners_2016_graph, 
        aes(x = reorder(partner, -yearly_total), 
            y = yearly_total)) + 
@@ -146,6 +163,7 @@ ggplot(top_partners_2016_graph,
   labs(x = "Trade Partner", y = "Total Export Value", title = "India: Top 2016 Export Partners") + 
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
+# Repeat for 2017
 ggplot(top_partners_2017_graph, 
        aes(x = reorder(partner, -yearly_total), 
            y = yearly_total)) + 
@@ -156,12 +174,21 @@ ggplot(top_partners_2017_graph,
 
 ## Largest India Export Commodities by Year 
 ```{r top_commodities, echo = FALSE}
+# Here we create a dataset for commodity goods that are exported from India
+# We select the commoditycode as this is relevant
+# We then sum across all countries to find total export value of commodity
+# We simplify by dividing by 1 billion to get value in billions. 
 commodity_totals <- newdata %>%
   select(year, commoditycode, Description, tradevalueus) %>%
   group_by(year, commoditycode, Description) %>%
   summarize(commodity_total = sum(tradevalueus)) %>%
   mutate(commodity_total = round(commodity_total/1000000000, 1))
 
+# This is just a reference summary table for top commodities in 2014
+# We filter by the year desired
+# Then we rank the commodity values
+# We select the top 15 just to show for reference
+# Finally, we clean up the column names 
 top_commodities_2014 <- commodity_totals %>%
   #filter(commoditycode != 99) %>%
   filter(year == 2014) %>%
@@ -171,6 +198,7 @@ top_commodities_2014 <- commodity_totals %>%
         col.names = c("Year", "Commodity", "Name", "Total Trade Value (USD)")) %>%
   kable_styling()
 
+# Repeat for 2015 commodity totals
 top_commodities_2015 <- commodity_totals %>%
   #filter(commoditycode != 99) %>%
   filter(year == 2015) %>%
@@ -180,6 +208,7 @@ top_commodities_2015 <- commodity_totals %>%
         col.names = c("Year", "Commodity", "Name", "Total Trade Value (USD)")) %>%
   kable_styling()
 
+# Repeat for 2016
 top_commodities_2016 <- commodity_totals %>%
   #filter(commoditycode != 99) %>%
   filter(year == 2016) %>%
@@ -189,6 +218,7 @@ top_commodities_2016 <- commodity_totals %>%
         col.names = c("Year", "Commodity", "Name", "Total Trade Value (USD)")) %>%
   kable_styling()
 
+# Repeat for 2017
 top_commodities_2017 <- commodity_totals %>%
   #filter(commoditycode != 99) %>%
   filter(year == 2017) %>%
@@ -198,7 +228,10 @@ top_commodities_2017 <- commodity_totals %>%
         col.names = c("Year", "Commodity", "Name", "Total Trade Value (USD)")) %>%
   kable_styling()
 
+# We save the commodity_totals that we created initially to be used in app in shiny folder
 saveRDS(commodity_totals, file = "./shiny/commodity_totals.rds")
+
+# Print the four tables of interest just for reference 
 top_commodities_2014
 top_commodities_2015
 top_commodities_2016

@@ -5,8 +5,8 @@ account: ranban
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 545245
-bundleId: 1735559
+bundleId: 1735574
 url: https://ranban.shinyapps.io/Shiny/
-when: 1543815411.53723
+when: 1543816009.59234
 asMultiple: FALSE
 asStatic: FALSE

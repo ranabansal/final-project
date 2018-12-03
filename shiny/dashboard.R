@@ -279,7 +279,7 @@ server <- function(input, output) {
       scale_colour_discrete(name = "Import Country")
   })
   
-  # This map is just for aesthetic effect for the dashboard
+  # This map is just for aesthetic effect for the dashboard.
   output$mymap <- renderLeaflet({
     leaflet() %>%
       addTiles() %>%
