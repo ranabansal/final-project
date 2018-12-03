@@ -6,6 +6,8 @@ output: html_document
 ---
 
 ```{r setup, include = FALSE}
+# In this RMD document we provide information on summary trade statistics (partners and commodities)
+# This is all static, and it becomes mutable in the shiny application published. 
 # Here we load the necessary libraries for importing the data and conducting the analysis. 
 library(tidyverse)
 library(dplyr)
@@ -39,7 +41,7 @@ write.dta(newdata, "/Users/ranabansal/Documents/Econometrics/independent/India/M
 ```
 
 ```{r modification, echo = FALSE}
-## We have to add teh first day of the month to the date
+## We have to add the first day of the month to the date
 # Then, we can format the date in a format that the graph will be able to use in the scatter plot
 mydata <- mydata %>%
   mutate(period_string = paste(period, sep='', '01')) %>%

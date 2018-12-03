@@ -18,8 +18,8 @@ partners <- read_rds("top_partners_simp.rds")
 # This data has information on most frequently exported commodities by year. 
 commodities <- read_rds("commodity_totals.rds")
 
-# This data has information on what fraction of imports India takes up
-# For a specific commodity in a specific country
+# This data has information on what fraction of imports India takes up with its exports
+# for a specific commodity in a specific country.
 alpha_two <- read.csv("Alphas2.csv")
 
 # Here, we add a new column that assigns a rank to each country based on how important
@@ -91,8 +91,8 @@ ui <- dashboardPage(
               h4("India Top Export Partners"),
               h6("India's largest export partners stayed relatively constant over the four year period: 
                  the United States of America, United Arab Emirates, Hong Kong, and China occupied the top four positions each year. 
-                 Saudi Arabia and the United Kingdom were also consistently among top export partners.
-                 Both the USA and UAE had over double the amount of imports from India than any other partner."),
+                 Saudi Arabia, Singapore, and the United Kingdom were also consistently among top export partners.
+                 In 2014-2016, Both the USA and UAE had over double the amount of imports from India than any other partner."),
               box(
                 title = "Please select year to view below.",
                 selectInput("year_choice", "Year:", 
@@ -121,11 +121,12 @@ ui <- dashboardPage(
       tabItem(tabName = "commodities",
               h4("India Top Commodities"),
               h6("The top export commodities for India over the four year period remained constant.
-                 Mineral fuels and pearls (diamonds, other gems) were most important, followed by vehicles, nuclear products and chemical goods."),
+                 Mineral fuels and pearls (diamonds, other gems) were most important, followed by vehicles, nuclear products and chemical goods.
+                 However, 2014 had a larger trade value of exports than the following years."),
               box(
                 selectInput("year_choice3", "Year:",
                             choices = c(2014, 2015, 2016, 2017)),
-                helpText("Commodities sorted by two-digit HS international code.")
+                helpText("Commodities below sorted by two-digit HS code.")
               ),
               DT::dataTableOutput("commodityPlot")
       ),
@@ -140,11 +141,11 @@ ui <- dashboardPage(
               h6("The graph below plots the share India has for a given country's imports
                  of iron and steel, for each month between January 2014 and December 2017.
                  The higher the fraction, the more important India's exports are for that country
-                 in the given month period. The user can select how many countries he or she
-                 would like to see."), 
+                 in the given month period."), 
               h6("I chose this commodity good because iron and steel are relatively homogenous goods
                  which these countries can get from a variety of sources, so looking at how much they choose
-                 to get from India over time is informative of the quality of relationship."),
+                 to get from India over time is informative of the quality of relationship.
+                 During the latter half of 2017, Hong Kong got a higher fraction of its iron and steel from India."),
               box(
                 sliderInput("countries",
                             "Number of Countries:",
