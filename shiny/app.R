@@ -1,5 +1,5 @@
-# This is the dashboard for the application, which houses four tabs.
-# Each of the four tabs includes different information on India's export sector.
+# This is the dashboard for the application, which houses five tabs.
+# Each of the five tabs includes different information on India's export sector.
 # Fall 2018 Gov Final Project
 # Here, we load the necessary libraries that will be used in the application. 
 library(shiny)
@@ -23,7 +23,7 @@ commodities <- read_rds("commodity_totals.rds")
 alpha_two <- read.csv("Alphas2.csv")
 
 # Here, we add a new column that assigns a rank to each country based on how important
-# the country is as an export partner.
+# the country is as an export partner. We get this from the position of the country in overall exports.
 # Later in the code, we use this rank to decide whether or not to show country on the graph. 
 # This is important for the numerical slider input. 
 alpha_two <- alpha_two %>%

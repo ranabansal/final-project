@@ -189,6 +189,7 @@ ggplot(top_partners_2017_graph,
 # We then sum across all countries to find total export value of commodity
 # We simplify by dividing by 1 billion to get value in billions. 
 commodity_totals <- newdata %>%
+  filter(partner != "World") %>%
   select(year, commoditycode, Description, tradevalueus) %>%
   group_by(year, commoditycode, Description) %>%
   summarize(commodity_total = sum(tradevalueus)) %>%
