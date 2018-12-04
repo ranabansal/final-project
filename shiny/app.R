@@ -1,7 +1,7 @@
 # This is the dashboard for the application, which houses four tabs.
 # Each of the four tabs includes different information on India's export sector.
-
-# Here, we load the necessary libraries that will be used in the application.
+# Fall 2018 Gov Final Project
+# Here, we load the necessary libraries that will be used in the application. 
 library(shiny)
 library(tidyverse)
 library(shinydashboard)
