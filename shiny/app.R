@@ -268,7 +268,7 @@ server <- function(input, output) {
       filter(Commodity == "Iron and steel") %>%
       ggplot(aes(x = Month, y = Alpha, color = Import.Country)) + geom_point() +
       xlab("Date") +
-      ylab("Fraction of Destination Country Imports from India") +
+      ylab("Fraction of Destination Imports from India") +
       ggtitle("Iron and Steel") +
       labs(caption = "Export Data from United Nations COMTRADE Database") +
       scale_colour_discrete(name = "Import Country")
@@ -285,7 +285,7 @@ server <- function(input, output) {
       filter(Commodity == "Coffee, tea, mate and spices") %>%
       ggplot(aes(x = Month, y = Alpha, color = Import.Country)) + geom_point() +
       xlab("Date") +
-      ylab("Fraction of Destination Country Imports from India") +
+      ylab("Fraction of Destination Imports from India") +
       ggtitle("Coffee, tea, mate and spices") +
       labs(caption = "Export Data from United Nations COMTRADE Database") +
       scale_colour_discrete(name = "Import Country")
