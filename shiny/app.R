@@ -94,7 +94,6 @@ ui <- dashboardPage(
                  Saudi Arabia, Singapore, and the United Kingdom were also consistently among top export partners.
                  In 2014-2016, Both the USA and UAE had over double the amount of imports from India than any other partner."),
               box(
-                title = "Please select year to view below.",
                 selectInput("year_choice", "Year:", 
                             choices = c(2014, 2015, 2016, 2017)), inline = TRUE
               ),
@@ -139,7 +138,7 @@ ui <- dashboardPage(
       tabItem(tabName = "snapshot",
               h4("Iron and Steel Exports"),
               h6("The graph below plots the share India has for a given country's imports
-                 of iron and steel, for each month between January 2014 and December 2017.
+                 of iron and steel, for each month between January 2014 and August 2018.
                  The higher the fraction, the more important India's exports are for that country
                  in the given month period."), 
               h6("I chose this commodity good because iron and steel are relatively homogenous goods
@@ -153,7 +152,7 @@ ui <- dashboardPage(
                             max = 15,
                             value = 10)
               ),
-              plotOutput("complot1", height = "300")
+              plotOutput("complot1", height = "250")
               ),
       
       # We provide another snapshot of a different commodity, this time coffee/tea
@@ -162,12 +161,15 @@ ui <- dashboardPage(
       tabItem(tabName = "snapshot2",
               h4("Coffee and Tea Exports"),
               h6("The graph below plots the share India has for a given country's imports
-                 of coffee, tea, mate, and spices for each month between January 2014 and December 2017.
+                 of coffee, tea, mate, and spices for each month between January 2014 and August 2018.
                  The higher the fraction, the more important India's exports are for that country
                  in the given month period. The user can select how many countries he or she
                  would like to see."),
               h6("I chose this commodity good as India is a large exporter of tea (famous for Darjeeling Tea)
-                 and I was interested in which countries rely on India for breakfast!"),
+                 and I was interested in which countries rely on India for breakfast! In 2017, the UAE and UK
+                 got a high fraction of this commodity from India, compared to other large partners. Trade partners 
+                 Japan and Malaysia, although smaller overall importers from India, both have substantial shares of their
+                 imports for this commodity coming from India, consistently above 20% in the case of Malaysia."),
               box(
                 sliderInput("countries2",
                             "Number of Countries:",
@@ -175,7 +177,7 @@ ui <- dashboardPage(
                             max = 15,
                             value = 10)
               ),
-              plotOutput("complot2", height = "300")
+              plotOutput("complot2", height = "250")
               )
       )
     )
