@@ -1,0 +1,12 @@
+name: shiny
+title: shiny
+username:
+account: ranban
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 545245
+bundleId: 1737420
+url: https://ranban.shinyapps.io/Shiny/
+when: 1543872550.75375
+asMultiple: FALSE
+asStatic: FALSE
