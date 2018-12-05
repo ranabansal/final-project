@@ -136,7 +136,7 @@ ui <- dashboardPage(
       # that are provided by India, and how this fraction changed over time. 
       # By playing with the slider, users can change how many of the top export partners are chosen.
       tabItem(tabName = "snapshot",
-              h4("Iron and Steel Exports"),
+              h5("Iron and Steel Exports"),
               h6("The graph below plots the share India has for a given country's imports
                  of iron and steel, for each month between January 2014 and August 2018.
                  The higher the fraction, the more important India's exports are for that country
@@ -152,14 +152,14 @@ ui <- dashboardPage(
                             max = 15,
                             value = 10)
               ),
-              plotOutput("complot1", height = "250")
+              plotOutput("complot1", height = 300)
               ),
       
       # We provide another snapshot of a different commodity, this time coffee/tea
       # We provide some background info on the good.
       # The functionality is the same. 
       tabItem(tabName = "snapshot2",
-              h4("Coffee and Tea Exports"),
+              h5("Coffee and Tea Exports"),
               h6("The graph below plots the share India has for a given country's imports
                  of coffee, tea, mate, and spices for each month between January 2014 and August 2018.
                  The higher the fraction, the more important India's exports are for that country
@@ -177,7 +177,7 @@ ui <- dashboardPage(
                             max = 15,
                             value = 10)
               ),
-              plotOutput("complot2", height = "250")
+              plotOutput("complot2", height = 300)
               )
       )
     )
